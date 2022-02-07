@@ -1,4 +1,4 @@
-package com.example.marvelapplication.features.details.character.network
+package com.example.marvelapplication.extensions
 
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest

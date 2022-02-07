@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase
 @Database(entities = arrayOf(FavoriteDto::class), version = 1, exportSchema = false)
 abstract class FavoriteDatabase : RoomDatabase() {
 
-    abstract fun getFavoriteDao():FavoriteDao
+    abstract fun FavoriteDao():FavoriteDao
 
     companion object{
 

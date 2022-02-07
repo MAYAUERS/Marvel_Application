@@ -1,3 +1,3 @@
-package com.example.marvelapplication.features.details.character.network
+package com.example.marvelapplication.extensions
 
 fun ByteArray.toHex() = joinToString("") { "%02x".format(it) }

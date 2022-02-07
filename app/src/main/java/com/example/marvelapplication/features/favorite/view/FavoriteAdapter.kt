@@ -6,7 +6,6 @@ import com.example.marvelapplication.R
 import com.example.marvelapplication.databinding.ListItemFavoriteBinding
 import com.example.marvelapplication.features.character.view.BaseAdapter
 import com.example.marvelapplication.features.favorite.database.FavoriteDto
-import com.example.marvelapplication.features.favorite.model.Favorite
 
 
 class FavoriteAdapter : BaseAdapter<FavoriteDto>() {

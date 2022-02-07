@@ -15,11 +15,6 @@ import retrofit2.Response
 
 class CharactersViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
-
 
     open val characters: LiveData<List<MarvelCharacters>?> get() = _characters
     private val _characters = MutableLiveData<List<MarvelCharacters>?>()

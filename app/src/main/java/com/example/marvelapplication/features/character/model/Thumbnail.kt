@@ -1,6 +1,6 @@
 package com.example.marvelapplication.features.character.model
 
-import com.example.marvelapplication.features.details.character.network.convertToHttps
+import com.example.marvelapplication.extensions.convertToHttps
 
 
 data class Thumbnail(

@@ -15,10 +15,10 @@ import com.example.marvelapplication.features.character.model.MarvelCharacters
 import com.example.marvelapplication.features.character.network.Config
 import com.example.marvelapplication.features.character.network.Config.API_KEY
 import com.example.marvelapplication.features.character.network.Config.refreshCharacter
-import com.example.marvelapplication.features.details.character.network.md5
 import com.example.marvelapplication.databinding.FragmentCharactersBinding
 import com.example.marvelapplication.features.character.viewModel.CharactersViewModel
 import com.example.marvelapplication.extensions.gone
+import com.example.marvelapplication.extensions.md5
 import com.example.marvelapplication.extensions.visible
 import java.util.*
 

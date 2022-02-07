@@ -5,32 +5,39 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.marvelapplication.R
+import com.example.marvelapplication.application.MarvelApplication
 import com.example.marvelapplication.databinding.FragmentFavoriteBinding
 import com.example.marvelapplication.extensions.gone
 import com.example.marvelapplication.extensions.visible
+import com.example.marvelapplication.features.character.model.MarvelCharacters
 import com.example.marvelapplication.features.character.network.Config.refreshFavorite
 import com.example.marvelapplication.features.favorite.database.FavoriteDto
+import com.example.marvelapplication.features.favorite.viewModel.FavViewModelFactory
 import com.example.marvelapplication.features.favorite.viewModel.FavoriteViewModel
 
 class FavoriteFragment : Fragment() {
 
-    private lateinit var favoriteViewModel: FavoriteViewModel
+   // private lateinit var favoriteViewModel: FavoriteViewModel
     private var _binding: FragmentFavoriteBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
+    private var isLoading = false
+    private var offset = 0
     private var favoriteAdapter = FavoriteAdapter()
 
     private var contentAsList: Boolean? = null
     private var deleteListener = false
+    private var isFirstPage = true
 
 
     override fun onCreateView(
@@ -38,14 +45,17 @@ class FavoriteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        favoriteViewModel =
-            ViewModelProvider(this).get(FavoriteViewModel::class.java)
+
+           // ViewModelProvider(this).get(FavoriteViewModel::class.java)
 
         _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         observeViewModel()
         return root
+    }
+    private val favoriteViewModel: FavoriteViewModel by viewModels {
+        FavViewModelFactory((requireActivity().application as MarvelApplication).repository)
     }
 
     override fun onDestroyView() {
@@ -54,44 +64,20 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        favoriteViewModel.allMarvelFavList.observe(viewLifecycleOwner){fav->
 
-        favoriteViewModel?.favorites?.observe(viewLifecycleOwner) {
-            if (it?.size == 0) {
-                showPlaceholder()
-            } else {
+            if (fav?.isNotEmpty() == true) {
+
+                offset += fav.size
+
+                isLoading = false
+
                 showList()
+
+                setList(fav)
+            } else {
+                showPlaceholder()
             }
-
-            setList(it)
-        }
-
-        favoriteViewModel?.error?.observe(viewLifecycleOwner) {
-            showPlaceholder()
-        }
-
-        favoriteViewModel?.deleted?.observe(viewLifecycleOwner) {
-            if (deleteListener) {
-                deleteListener = false
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.favorite_deleted),
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                favoriteViewModel?.deleted
-            }
-        }
-
-        favoriteViewModel?.listMode?.observe(viewLifecycleOwner) {
-            contentAsList = it ?: false
-
-            refreshList()
-
-            activity?.invalidateOptionsMenu()
-        }
-
-        favoriteViewModel?.savedListMode?.observe(viewLifecycleOwner) {
-            favoriteViewModel?.favorites
         }
     }
 
@@ -103,26 +89,21 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun showPlaceholder() {
-        binding.favoritePlaceholder.visible()
-        binding.favoriteListLoader.gone()
-        binding.favoriteProgressBar.gone()
+        if (!binding.favoriteList.isVisible ) {
+            binding.favoritePlaceholder.visible()
+            binding.favoriteListLoader.gone()
+            binding.favoriteProgressBar.gone()
+            binding.favoriteList.gone()
+        } else {
+            binding.favoriteListLoader.gone()
+        }
     }
+    private fun setList(favorite: List<FavoriteDto>?) {
+        favoriteAdapter.setItems(favorite)
 
-    private fun setList(favorites: List<FavoriteDto>?) {
-        favoriteAdapter.clearItems()
-        favoriteAdapter.setItems(favorites)
+        if (isFirstPage && binding.favoriteList.layoutManager == null) {
+            isFirstPage = false
 
-        favoriteAdapter.clickListenerFavorite= {
-            favoriteViewModel?.addFavorite(it)
-            contentAsList = true
-        }
-        favoriteAdapter.clickListenerFavorite = { favorite ->
-            favoriteViewModel?.deleteFavorite(favorite)
-            deleteListener = true
-        }
-
-
-        if (binding.favoriteList.layoutManager == null) {
             binding.favoriteList.apply {
                 setHasFixedSize(true)
 
@@ -135,28 +116,6 @@ class FavoriteFragment : Fragment() {
                 adapter = favoriteAdapter
             }
         }
-    }
 
-    private fun refreshList() {
-        if (binding.favoriteList.layoutManager == null || refreshFavorite) {
-            refreshFavorite = false
-            binding.favoriteList.apply {
-                setHasFixedSize(true)
-
-                layoutManager = if (contentAsList == true) {
-                    GridLayoutManager(context, 2)
-                } else {
-                    LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-                }
-
-                adapter = favoriteAdapter
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        favoriteViewModel?.allFav
     }
 }
