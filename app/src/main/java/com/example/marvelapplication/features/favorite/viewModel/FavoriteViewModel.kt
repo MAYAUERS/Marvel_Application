@@ -8,15 +8,22 @@ import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 
-open class FavoriteViewModel(private val repository: FavoriteRepository): ViewModel() {
+open class FavoriteViewModel(private val repository: FavoriteRepository
+                             ): ViewModel() {
 
-    fun addFavMarvel(favoriteDto: FavoriteDto) {
+    open val favorites: LiveData<List<FavoriteDto>?> get() = _favorites
+    private val _favorites = MutableLiveData<List<FavoriteDto>?>()
+    open val deleted: LiveData<Unit?> get() = _deleted
+    private val _deleted = MutableLiveData<Unit?>()
+
+
+  /*  fun deleteFavMarvel(favoriteDto: FavoriteDto) {
         viewModelScope.launch {
-           // repository.insertFavMarvel(favoriteDto)
+            repository.deleteFave(favoriteDto)
         }
-    }
+    }*/
 
-    val allMarvelFavList:LiveData<List<FavoriteDto>> =repository.allMarvelList.asLiveData()
+   // val allMarvelFavList:LiveData<List<FavoriteDto>> =repository.allMarvelList.asLiveData()
 
 }
 

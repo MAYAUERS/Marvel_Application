@@ -64,21 +64,14 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        favoriteViewModel.allMarvelFavList.observe(viewLifecycleOwner){fav->
-
-            if (fav?.isNotEmpty() == true) {
-
-                offset += fav.size
-
-                isLoading = false
-
-                showList()
-
-                setList(fav)
-            } else {
+       /* favoriteViewModel?.allMarvelFavList?.observe(viewLifecycleOwner) {
+            if (it?.size == 0) {
                 showPlaceholder()
+            } else {
+                showList()
             }
-        }
+            setList(it)
+        }*/
     }
 
     private fun showList() {
@@ -99,11 +92,10 @@ class FavoriteFragment : Fragment() {
         }
     }
     private fun setList(favorite: List<FavoriteDto>?) {
+        favoriteAdapter.clearItems()
         favoriteAdapter.setItems(favorite)
 
-        if (isFirstPage && binding.favoriteList.layoutManager == null) {
-            isFirstPage = false
-
+        if (binding.favoriteList.layoutManager == null) {
             binding.favoriteList.apply {
                 setHasFixedSize(true)
 

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Marvel Application</string>
-    <string name="title_home">Character</string>
+    <string name="title_home">Marvel Character</string>
     <string name="title_dashboard">Favorite</string>
-    <string name="title_notifications">Details</string>
+    <string name="title_Details">Character Details</string>
 
     <!-- menu -->
     <string name="menu_refresh">Refresh</string>
@@ -24,4 +24,6 @@
     <string name="details_added_favorites">Added to favorites!</string>
     <string name="details_comics_title">Comics</string>
     <string name="details_series_title">Series</string>
+    <string name="search">Search</string>
+
 </resources>

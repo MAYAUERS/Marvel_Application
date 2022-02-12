@@ -16,7 +16,9 @@ class CharacterAdapter : BaseAdapter<MarvelCharacters>() {
     override fun View.bindView(item: MarvelCharacters, viewHolder: ViewHolder) {
         val binding = ListItemCharacterBinding.bind(this)
 
-        setOnClickListener { clickListener(item.id) }
+        setOnClickListener {
+            clickListener(item.id)
+        }
 
         binding.characterName.text = item.name
         binding.characterImage.load(item.thumbnail.getUrl())

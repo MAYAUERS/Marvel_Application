@@ -5,6 +5,10 @@
       <map>
         <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/drawable/ic_baseline_perm_scan_wifi_24.xml" value="0.17222222222222222" />
         <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/drawable/ic_favorite.xml" value="0.17222222222222222" />
+        <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/drawable/ic_favorite_black.xml" value="0.14074074074074075" />
+        <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/drawable/ic_grid.xml" value="0.1125" />
+        <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/drawable/ic_list.xml" value="0.1125" />
+        <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/drawable/ic_search.xml" value="0.14074074074074075" />
         <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/layout/activity_splash.xml" value="0.1" />
         <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/layout/fragment_characters.xml" value="0.11730072463768115" />
@@ -14,8 +18,12 @@
         <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/layout/fragment_home.xml" value="0.11730072463768115" />
         <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/layout/fragment_notifications.xml" value="0.11730072463768115" />
         <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/layout/list_item_character.xml" value="0.1" />
+        <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/layout/list_item_details_info.xml" value="0.1" />
         <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/layout/list_item_favorite.xml" value="0.1" />
         <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/menu/menu_grid.xml" value="0.1" />
+        <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/menu/menu_list.xml" value="0.14166666666666666" />
+        <entry key="..\:/Users/meepotda/MarvelApplication/app/src/main/res/menu/search_character_menu.xml" value="0.14166666666666666" />
       </map>
     </option>
   </component>

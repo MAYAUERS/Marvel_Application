@@ -10,17 +10,36 @@
         android:id="@+id/navigation_characters"
         android:name="com.example.marvelapplication.features.character.view.CharactersFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_characters" />
+        tools:layout="@layout/fragment_characters" >
+        <action
+            android:id="@+id/action_charactersFragment_to_characterDetailFragment"
+            app:destination="@id/navigation_details" />
+        <action
+            android:id="@+id/action_allHeroFragment_to_favouriteCharacterFragment"
+            app:destination="@id/navigation_favorite" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/navigation_favorite"
         android:name="com.example.marvelapplication.features.favorite.view.FavoriteFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite">
+
+        <action
+            android:id="@+id/action_favouriteCharacterFragment_to_characterDetailFragment"
+            app:destination="@id/navigation_characters" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_details"
-        android:name="com.example.marvelapplication.view.fragment.DetailsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_details" />
+        android:name="com.example.marvelapplication.features.details.view.DetailsFragment"
+        android:label="@string/title_Details"
+        tools:layout="@layout/fragment_details" >
+
+        <argument
+            android:name="characterId"
+            android:defaultValue="0L"
+            app:argType="long" />
+    </fragment>
 </navigation>

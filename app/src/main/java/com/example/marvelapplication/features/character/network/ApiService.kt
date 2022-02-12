@@ -16,4 +16,18 @@ interface ApiService {
         @Query("offset") offset: Int
     ): Response<MarvelCharacterList>
 
+    @GET("characters")
+    suspend fun searchCharacter(
+        @Query("nameStartsWith") query: String,
+        @Query("offset") offset: Int? = 0,
+        @Query("limit") limit: Int? = 20
+    ): Response<MarvelCharacterList>
+
+    @GET("characters")
+    suspend fun getAllCharacters(
+        @Query("offset") offset: Int? = 0,
+        @Query("limit") limit: Int? = 20
+    ):  Response<MarvelCharacterList>
+
+
 }

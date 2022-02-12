@@ -7,7 +7,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class CharacterApiClient {
+class ApiClient {
 
     companion object{
 
@@ -15,7 +15,7 @@ class CharacterApiClient {
         private val httpLoggingInterceptor=HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         private val okHttpClient=OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).build()
 
-        fun getCharacterApiClient() :Retrofit{
+        fun getApiClient() :Retrofit{
 
             return Retrofit.Builder().baseUrl(URL_BASE_MARVEL)
                 .client(okHttpClient)

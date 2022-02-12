@@ -1,16 +1,21 @@
 package com.example.marvelapplication.features.character.view
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.marvelapplication.R
+
 import com.example.marvelapplication.features.character.model.MarvelCharacters
 import com.example.marvelapplication.features.character.network.Config
 import com.example.marvelapplication.features.character.network.Config.API_KEY
@@ -20,6 +25,10 @@ import com.example.marvelapplication.features.character.viewModel.CharactersView
 import com.example.marvelapplication.extensions.gone
 import com.example.marvelapplication.extensions.md5
 import com.example.marvelapplication.extensions.visible
+import com.example.marvelapplication.features.character.network.Config.refreshFavorite
+import com.example.marvelapplication.features.favorite.database.FavoriteDto
+import com.example.marvelapplication.view.activity.MainActivity
+
 import java.util.*
 
 class CharactersFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -30,11 +39,18 @@ class CharactersFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var isFirstPage = true
     private var offset = 0
     private var contentAsList: Boolean? = null
+    private var favoriteListener = false
+    private val main: MainActivity get() = (activity as MainActivity)
+    private val navController: NavController? get() = main.navController
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     private var isLoading = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,7 +62,7 @@ class CharactersFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val root: View = binding.root
         observeViewModel()
         setLayout()
-
+        setScreen()
         return root
     }
 
@@ -87,18 +103,18 @@ class CharactersFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun observeViewModel() {
         charactersViewModel.charactersData.observe(viewLifecycleOwner){character->
-            var r= character?.data?.results
+            var characters= character?.data?.results
 
-            if (r?.isNotEmpty() == true) {
+            if (characters?.isNotEmpty() == true) {
                 binding.charactersRefresh.isRefreshing = false
 
-                offset += r.size
+                offset += characters.size
 
                 isLoading = false
 
                 showList()
 
-                setList(r)
+                setList(characters)
             } else {
                 showPlaceholder()
             }
@@ -114,6 +130,17 @@ class CharactersFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             showPlaceholder()
         }
 
+        charactersViewModel?.savedFavorite?.observe(viewLifecycleOwner) {
+            if (favoriteListener) {
+                favoriteListener = false
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.characters_added_favorite),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
         charactersViewModel?.listMode?.observe(viewLifecycleOwner) {
             contentAsList = it ?: false
 
@@ -126,6 +153,11 @@ class CharactersFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun setList(characters: List<MarvelCharacters>?) {
         characterAdapter.setItems(characters)
 
+        characterAdapter.clickListener = { characterId ->
+            val action = CharactersFragmentDirections.actionCharactersFragmentToCharacterDetailFragment()
+            action.characterId = characterId
+            navController?.navigate(action)
+        }
         if (isFirstPage && binding.charactersList.layoutManager == null) {
             isFirstPage = false
 
@@ -141,6 +173,8 @@ class CharactersFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 adapter = characterAdapter
             }
         }
+
+
 
     }
     private fun refreshList() {
@@ -180,4 +214,24 @@ class CharactersFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     fun createTimestamp() = Date().time
     fun createHash(timestamp: Long) = (timestamp.toString() + Config.PRIVATE_KEY + API_KEY).md5()
+
+
+   /* override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_character_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+
+    }*/
+    private fun setScreen() {
+        hideBackArrow()
+        setHasOptionsMenu(true)
+    }
+
+    fun hideBackArrow() {
+        if (activity is MainActivity) {
+            (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
+    }
+
+
+
 }
